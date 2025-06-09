@@ -6,10 +6,9 @@ interface Config {
   GATEWAY_JWT_SECRET: string;
   GATEWAY_JWT_EXPIRES_IN: string;
   LOG_LEVEL: string;
-  REDIS_URL: string;
   AUTH_SERVICE_URL: string;
-  ACCOUNTS_SERVICE_URL: string;
-  TRANSACTION_SERVICE_URL: string;
+  CONTENT_SERVICE_URL: string;
+  AI_SERVICE_URL: string;
 }
 
 export const config: Config = {
@@ -22,10 +21,9 @@ export const config: Config = {
     process.env.GATEWAY_JWT_SECRET || 'your-default-gateway-secret-key',
   GATEWAY_JWT_EXPIRES_IN: process.env.GATEWAY_JWT_EXPIRES_IN || '1m',
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   AUTH_SERVICE_URL: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
-  ACCOUNTS_SERVICE_URL:
-    process.env.ACCOUNTS_SERVICE_URL || 'http://localhost:3002',
-  TRANSACTION_SERVICE_URL:
-    process.env.TRANSACTION_SERVICE_URL || 'http://localhost:3003',
+  CONTENT_SERVICE_URL:
+    process.env.CONTENT_SERVICE_URL || 'http://localhost:3002',
+  AI_SERVICE_URL:
+    process.env.AI_SERVICE_URL || 'http://192.168.56.191:5000',
 };

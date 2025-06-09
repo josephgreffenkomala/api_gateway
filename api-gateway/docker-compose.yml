@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - AUTH_SERVICE_URL=http://auth-service:5000
+      - USER_SERVICE_URL=http://user-service:5001
+    depends_on:
+      - auth-service
+      - user-service
+    restart: unless-stopped
+
+  auth-service:
+    image: your-auth-service-image:latest
+    container_name: auth-service
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+
+  user-service:
+    image: your-user-service-image:latest
+    container_name: user-service
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production

@@ -4,14 +4,18 @@ dotenv.config();
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 
 import { limiter } from './middlewares/rate-limiter.middleware';
 import { config } from './config';
 import logger from './config/logger';
 import { proxyServices } from './config/services';
 
-const app = express();
 
+
+const app = express();
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
 app.use(limiter);
