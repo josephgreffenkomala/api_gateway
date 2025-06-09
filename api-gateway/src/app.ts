@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
@@ -28,7 +26,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ status: 'ok' , authURL:config.AUTH_SERVICE_URL});
 });
 
 // Service routes

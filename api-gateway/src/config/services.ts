@@ -10,7 +10,7 @@ class ServiceProxy {
   private static readonly serviceConfigs: ServiceConfig[] = [
     {
       path: '/auth/',
-      url: 'https://scalable-auth-production.up.railway.app',
+      url: config.AUTH_SERVICE_URL,
       pathRewrite: { '^/auth/': '/' },
       name: 'auth-service',
       timeout: 5000,
