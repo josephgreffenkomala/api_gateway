@@ -9,10 +9,18 @@ import { limiter } from './middlewares/rate-limiter.middleware';
 import { config } from './config';
 import logger from './config/logger';
 import { proxyServices } from './config/services';
+import { validateJWT } from './middlewares/validateJWT';
 
 
 
 const app = express();
+app.use((req, res, next) => {
+  const shouldSkip = req.path.startsWith('/auth/') || req.path.startsWith('/AI/') || req.path.startsWith('/progress/');
+  if (shouldSkip) return next(); // Skip express.json
+
+  express.json()(req, res, next); // Apply parser hanya untuk route lain
+});
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
@@ -24,13 +32,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+
+
+app.use(validateJWT);
+// Service routes
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok' , authURL:config.AUTH_SERVICE_URL});
+  // const requestBody = req.body; // Mengakses body dari request
+  res.status(200).json({ status: 'ok', receivedBody:config.AUTH_SERVICE_URL });
 });
 
-// Service routes
 proxyServices(app);
+
+
 
 // 404 handler
 app.use((req: Request, res: Response) => {

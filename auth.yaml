@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: auth-service
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: auth-service
@@ -14,9 +13,51 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: josephgreffenkomala/auth-service:latest # Ganti dengan nama image Docker Anda
+        image: susatos9/auth-service:latest
+        imagePullPolicy: Always
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
+        env:
+        - name: SUPABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: SUPABASE_URL
+        - name: SUPABASE_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: SUPABASE_API_KEY
+        - name: SUPABASE_SERVICE_ROLE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: SUPABASE_SERVICE_ROLE_KEY
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_SECRET
+        - name: JWT_REFRESH_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_REFRESH_SECRET
+        - name: JWT_EXPIRES_IN
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: JWT_EXPIRES_IN
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: PORT
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: auth-service-config
+              key: NODE_ENV
 ---
 apiVersion: v1
 kind: Service
@@ -27,5 +68,5 @@ spec:
     app: auth-service
   ports:
   - protocol: TCP
-    port: 3001
-    targetPort: 3001
+    port: 3000
+    targetPort: 3000

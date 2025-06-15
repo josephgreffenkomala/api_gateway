@@ -13,7 +13,6 @@ class ServiceProxy {
       url: config.AUTH_SERVICE_URL,
       pathRewrite: { '^/auth/': '/' },
       name: 'auth-service',
-      timeout: 5000,
     },
     {
       path: '/AI/',
