@@ -5,7 +5,6 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 
-import { limiter } from './middlewares/rate-limiter.middleware';
 import { config } from './config';
 import logger from './config/logger';
 import { proxyServices } from './config/services';
@@ -15,7 +14,7 @@ import { validateJWT } from './middlewares/validateJWT';
 
 const app = express();
 app.use((req, res, next) => {
-  const shouldSkip = req.path.startsWith('/auth/') || req.path.startsWith('/AI/') || req.path.startsWith('/progress/');
+  const shouldSkip = req.path.startsWith('/auth/') || req.path.startsWith('/ai/') || req.path.startsWith('/progress/');
   if (shouldSkip) return next(); // Skip express.json
 
   express.json()(req, res, next); // Apply parser hanya untuk route lain
@@ -24,7 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
-app.use(limiter);
 
 // Request logging
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -39,7 +37,11 @@ app.use(validateJWT);
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
   // const requestBody = req.body; // Mengakses body dari request
-  res.status(200).json({ status: 'ok', receivedBody:config.AUTH_SERVICE_URL });
+  res.status(200).json({ status: 'ok', auth:config.AUTH_SERVICE_URL,
+    progress: config.PROGRESS_SERVICE_URL,
+    ai: config.AI_SERVICE_URL,
+    
+   });
 });
 
 proxyServices(app);

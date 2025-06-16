@@ -15,14 +15,14 @@ class ServiceProxy {
       name: 'auth-service',
     },
     {
-      path: '/AI/',
-      url:'http://192.168.56.191:5000',
-      pathRewrite: { '^/AI/': '/' },
+      path: '/ai/',
+      url:config.AI_SERVICE_URL,
+      pathRewrite: { '^/ai/': '/' },
       name: 'AI-service',
     },
     {
       path: '/progress/',
-      url:'https://pts.koyeb.app/api/progress',
+      url:config.PROGRESS_SERVICE_URL,
       pathRewrite: { '^/progress/': '/' },
       name: 'progress-service',
     },
