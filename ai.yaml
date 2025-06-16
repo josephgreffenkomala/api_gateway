@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-service
+spec:
+  selector:
+    matchLabels:
+      app: ai-service
+  template:
+    metadata:
+      labels:
+        app: ai-service
+    spec:
+      containers:
+      - name: ai-service
+        image: hafidambardi/grammar-checker:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: "40m" # Limit CPU usage to 50 millicores
+            memory: "256Mi" # Limit memory usage to 256 MiB
+          requests:
+            cpu: "10m" # Request 10 millicores of CPU
+            memory: "128Mi" # Request 128 MiB of memory
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ai-config
+              key: PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service
+spec:
+  selector:
+    app: ai-service
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000

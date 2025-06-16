@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: progress-tracking-service
+  labels:
+    app: progress-tracking-service
+spec:
+  selector:
+    matchLabels:
+      app: progress-tracking-service
+  template:
+    metadata:
+      labels:
+        app: progress-tracking-service
+    spec:
+      containers:
+      - name: progress-tracking-service
+        image: uzuki28/progress-tracking-service:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+        resources:
+          limits:
+            cpu: "40m" # Limit CPU usage to 500 millicores
+            memory: "256Mi" # Limit memory usage to 256 MiB
+          requests:
+            cpu: "10m" # Request 250 millicores of CPU
+            memory: "128Mi" # Request 128 MiB of memory
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: progress-config
+              key: PORT
+        - name: MONGO_URI
+          valueFrom:
+            configMapKeyRef:
+              name: progress-config
+              key: MONGO_URI
+        - name: DEFAULT_TIMEOUTS
+          valueFrom:
+            configMapKeyRef:
+              name: progress-config
+              key: DEFAULT_TIMEOUTS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: progress-tracking-service
+spec:
+  selector:
+    app: progress-tracking-service
+  ports:
+  - protocol: TCP
+    port: 3001
+    targetPort: 3001
