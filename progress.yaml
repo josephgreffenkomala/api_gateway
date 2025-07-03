@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: progress-tracking-service
-        image: uzuki28/progress-tracking-service:1.0.0
+        ima ge: uzuki28/progress-tracking-service:1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 3001
